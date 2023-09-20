@@ -4,6 +4,74 @@ bool compararCadenas(const char *cadena1, const char *cadena2);
 int cadenaAEntero(const char *cadena);
 void enteroACadena(int numero, char*& cadena);
 
+const int FILAS = 6;
+const int COLUMNAS = 8;
+
+int contarEstrellas(int (*matriz)[COLUMNAS]) {
+    int contador = 0;
+
+    for (int i = 1; i < FILAS - 1; i++) {
+        for (int j = 1; j < COLUMNAS - 1; j++) {
+            int suma = matriz[i][j] + matriz[i][j-1] + matriz[i][j+1] + matriz[i-1][j] + matriz[i+1][j];
+            if (suma / 5 > 6) {
+                contador++;
+            }
+        }
+    }
+
+    return contador;
+}
+const int filas = 5;
+const int columnas = 5;
+
+// Función para imprimir una matriz
+void imprimirMatriz(int matriz[filas][columnas]) {
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            cout << matriz[i][j] << "\t";
+        }
+        cout << endl;
+    }
+}
+
+// Función para rotar una matriz 90 grados en sentido horario
+void rotar90Grados(int matriz[filas][columnas]) {
+    int matrizRotada[columnas][filas];
+
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            matrizRotada[j][filas - 1 - i] = matriz[i][j];
+        }
+    }
+
+    // Copiamos la matriz rotada de vuelta a la matriz original
+    for (int i = 0; i < columnas; i++) {
+        for (int j = 0; j < filas; j++) {
+            matriz[i][j] = matrizRotada[i][j];
+        }
+    }
+}
+
+// Función para calcular el número de caminos posibles en una cuadrícula de nxn
+unsigned long long calcularCaminos(int n) {
+    // Creamos una matriz para almacenar los resultados
+    unsigned long long caminos[n + 1][n + 1];
+
+    // Inicializamos la primera fila y la primera columna con 1
+    for (int i = 0; i <= n; i++) {
+        caminos[0][i] = 1;
+        caminos[i][0] = 1;
+    }
+
+    // Llenamos la matriz utilizando programación dinámica
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            caminos[i][j] = caminos[i - 1][j] + caminos[i][j - 1];
+        }
+    }
+
+    return caminos[n][n];
+}
 
 int main()
 {
@@ -17,6 +85,12 @@ int main()
         cout << "4. Problema 5" << endl;
         cout << "5. Problema 7" << endl;
         cout << "6. Problema 8" << endl;
+        cout << "7. Problema 9" << endl;
+        cout << "8. Problema 11" << endl;
+        cout << "9. Problema 12" << endl;
+        cout << "10. Problema 13" << endl;
+        cout << "11. Problema 14" << endl;
+        cout << "12. Problema 16" << endl;
 
 
         cout << "0. Salir" << endl;
@@ -181,7 +255,247 @@ int main()
 
             break;
         }
+        case 7: {
+            cout << "Ha seleccionado el problema 9." << endl;
+            // Declaramos las variables
 
+            int n;
+            string numero;
+            int suma = 0;
+
+            // Pedimos al usuario que ingrese el número n
+            cout << "Ingrese el numero n: ";
+                    cin >> n;
+
+            // Pedimos al usuario que ingrese el número
+            cout << "Ingrese el numero: ";
+                    cin >> numero;
+
+            // Verificamos si la longitud de la cadena es divisible por n
+            int longitud = numero.length();
+            if (longitud % n != 0) {
+                // Si no es divisible, agregamos un cero a la izquierda
+                int ceros_a_agregar = n - (longitud % n);
+                string ceros(ceros_a_agregar, '0');
+                numero = ceros + numero;
+            }
+
+            // Separamos el número en números de n cifras y calculamos la suma
+            for (int i = 0; i < numero.length(); i += n) {
+                string numero_n = numero.substr(i, n);
+                int num = stoi(numero_n);
+                suma += num;
+            }
+
+            // Imprimimos el resultado
+            cout << "Original: " << numero << endl;
+            cout << "Suma: " << suma << endl;
+
+
+            break;
+        }
+        case 8: {
+            cout << "Has elegido el problema 11 (sala de cine)." << endl;
+
+
+            const int FILAS = 15;
+            const int ASIENTOS_POR_FILA = 20;
+
+            // Matriz para representar la sala de cine
+            char sala[FILAS][ASIENTOS_POR_FILA];
+
+            // Inicializar la sala con asientos disponibles
+            for (int i = 0; i < FILAS; i++) {
+                for (int j = 0; j < ASIENTOS_POR_FILA; j++) {
+                    sala[i][j] = '-';
+                }
+            }
+
+            char fila;
+            int numeroAsiento;
+
+            while (true) {
+                // Mostrar la sala de cine
+                for (int i = 0; i < FILAS; i++) {
+                    for (int j = 0; j < ASIENTOS_POR_FILA; j++) {
+                        cout << sala[i][j] << " ";
+                    }
+                    cout << endl;
+                }
+
+                // Pedir al usuario que ingrese la fila y el número del asiento
+                cout << "Para ingresar la fila use letras mayusculas. ";
+                cout << "Ingrese la fila (A-O) y el numero del asiento (1-20): ";
+                        cin >> fila >> numeroAsiento;
+
+                // Verificar si el asiento está disponible o reservado
+                if (fila >= 'A' && fila <= 'O' && numeroAsiento >= 1 && numeroAsiento <= 20) {
+                    int filaIndex = fila - 'A';
+                    int asientoIndex = numeroAsiento - 1;
+
+                    if (sala[filaIndex][asientoIndex] == '-') {
+                        // El asiento está disponible, reservarlo
+                        sala[filaIndex][asientoIndex] = '+';
+                        cout << "Reserva exitosa." << endl;
+                    } else if (sala[filaIndex][asientoIndex] == '+') {
+                        // El asiento está reservado, cancelar la reserva
+                        sala[filaIndex][asientoIndex] = '-';
+                        cout << "Cancelación de reserva exitosa." << endl;
+                    } else {
+                        // El usuario ingresó una fila o un número de asiento inválido
+                        cout << "Fila o número de asiento inválido." << endl;
+                    }
+                } else {
+                    // El usuario ingresó una fila o un número de asiento inválido
+                    cout << "Fila o número de asiento inválido." << endl;
+                }
+            }
+
+
+
+            break;
+        }
+        case 9:{
+            cout << "Has elegido el problema 12 (Cuadrado magico. " << endl;
+            // Declaramos las variables
+            int n;
+            int matriz[10][10];
+            int suma_filas[10], suma_columnas[10], suma_diagonales[2];
+
+            // Pedimos al usuario que ingrese el tamaño de la matriz
+            cout << "Ingrese el tamaño de la matriz: ";
+                    cin >> n;
+
+            // Pedimos al usuario que ingrese los números de la matriz
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    cout << "Ingrese el numero en la posición (" << i << "," << j << "): ";
+                    cin >> matriz[i][j];
+                }
+            }
+
+            // Calculamos las sumas de las filas, columnas y diagonales
+            for (int i = 0; i < n; i++) {
+                suma_filas[i] = 0;
+                for (int j = 0; j < n; j++) {
+                    suma_filas[i] += matriz[i][j];
+                }
+            }
+
+            for (int i = 0; i < n; i++) {
+                suma_columnas[i] = 0;
+                for (int j = 0; j < n; j++) {
+                    suma_columnas[i] += matriz[j][i];
+                }
+            }
+
+            suma_diagonales[0] = 0;
+            for (int i = 0; i < n; i++) {
+                suma_diagonales[0] += matriz[i][i];
+            }
+
+            suma_diagonales[1] = 0;
+            for (int i = 0; i < n; i++) {
+                suma_diagonales[1] += matriz[i][n - i - 1];
+            }
+
+            // Verificamos si la matriz es un cuadrado mágico
+            bool es_cuadrado_magico = true;
+            for (int i = 0; i < 2; i++) {
+                if (suma_diagonales[i] != suma_filas[0]) {
+                    es_cuadrado_magico = false;
+                    break;
+                }
+            }
+
+            for (int i = 1; i < n; i++) {
+                if (suma_filas[i] != suma_filas[0] || suma_columnas[i] != suma_filas[0]) {
+                    es_cuadrado_magico = false;
+                    break;
+                }
+            }
+
+            // Imprimimos la matriz
+            cout << endl;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    cout << matriz[i][j] << " ";
+                }
+                cout << endl;
+            }
+
+            // Imprimimos el resultado
+            if (es_cuadrado_magico) {
+                cout << "La matriz es un cuadrado magico." << endl;
+            } else {
+                cout << "La matriz no es un cuadrado magico." << endl;
+            }
+            break;
+        }
+        case 10:{
+            cout << "Has elegido el problema 13. " << endl;
+            int matriz[FILAS][COLUMNAS] = {
+                {0, 3, 4, 0, 0, 0, 6, 8},
+                {5, 13, 6, 0, 0, 0, 2, 3},
+                {2, 6, 2, 7, 3, 0, 10, 0},
+                {0, 0, 4, 15, 4, 1, 6, 0},
+                {0, 0, 7, 12, 6, 9, 10, 4},
+                {5, 0, 6, 10, 6, 4, 8, 0}
+            };
+
+            int estrellas = contarEstrellas(matriz);
+            cout << "Número de estrellas encontradas: " << estrellas << endl;
+
+            break;
+        }
+        case 11: {
+            cout << "Has elegido el problema 14 (Matriz rotada). " << endl;
+            int matriz[filas][columnas];
+
+            // Llenar la matriz con los números del 1 al 25
+            int contador = 1;
+            for (int i = 0; i < filas; i++) {
+                for (int j = 0; j < columnas; j++) {
+                    matriz[i][j] = contador;
+                    contador++;
+                }
+            }
+
+            // Imprimir la matriz original
+            cout << "Matriz Original:" << endl;
+            imprimirMatriz(matriz);
+
+            // Rotar 90 grados y mostrar
+            cout << "\nMatriz Rotada 90 Grados:" << endl;
+            rotar90Grados(matriz);
+            imprimirMatriz(matriz);
+
+            // Rotar 180 grados y mostrar
+            cout << "\nMatriz Rotada 180 Grados:" << endl;
+            rotar90Grados(matriz);
+            rotar90Grados(matriz);
+            imprimirMatriz(matriz);
+
+            // Rotar 270 grados y mostrar
+            cout << "\nMatriz Rotada 270 Grados:" << endl;
+            rotar90Grados(matriz);
+            rotar90Grados(matriz);
+            rotar90Grados(matriz);
+            imprimirMatriz(matriz);
+
+            break;
+        }
+        case 12: {
+            int n;
+            cout << "Ingrese el tamanio de la cuadricula (n): ";
+            cin >> n;
+
+            // Calculamos el número de caminos posibles
+            unsigned long long numCaminos = calcularCaminos(n);
+
+            cout << "Para una malla de " << n << "x" << n << " puntos hay " << numCaminos << " caminos." << endl;
+            break;
+        }
 
         case 0: {
             cout << "Saliendo del programa." << endl;
@@ -255,3 +569,6 @@ void enteroACadena(int numero, char*& cadena){
     cadena[digitos] = '\0';
 
 }
+
+
+

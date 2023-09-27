@@ -356,7 +356,7 @@ int main()
             break;
         }
         case 9:{
-            cout << "Has elegido el problema 12 (Cuadrado magico. " << endl;
+            cout << "Has elegido el problema 12 (Cuadrado magico). " << endl;
             // Declaramos las variables
             int n;
             int matriz[10][10];
@@ -487,6 +487,7 @@ int main()
         }
         case 12: {
             int n;
+            cout << "Has elegido el problema 16. " << endl;
             cout << "Ingrese el tamanio de la cuadricula (n): ";
             cin >> n;
 

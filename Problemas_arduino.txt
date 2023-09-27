@@ -1,0 +1,141 @@
+Problema 6
+// C++ code
+//
+void setup()
+{
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  while (!Serial.available()){
+  }
+ // Lee la cadena ingresada desde el monitor serial
+  String entrada = Serial.readStringUntil('\n');
+  
+  // Convierte la cadena a mayúsculas
+  String mayusculas = entrada;
+  mayusculas.toUpperCase();
+  
+  // Imprime la cadena original y la versión en mayúsculas
+  Serial.print("Original: ");
+  Serial.println(entrada);
+  Serial.print("En mayuscula: ");
+  Serial.println(mayusculas);
+  
+  // Limpia el búfer serial
+  while (Serial.available()) {
+    Serial.read();
+  }
+
+}
+---------------------------------------------------------------------
+Problema 10
+
+// C++ code
+//
+
+void setup() {
+  Serial.begin(9600);
+}
+
+// Función para convertir un número romano a arábigo
+int convertirARabigo(String romano) {
+  int resultado = 0;
+  
+  for (int i = 0; i < romano.length(); i++) {
+    int valorActual = valorCaracterRomano(romano.charAt(i));
+    
+    if (i < romano.length() - 1) {
+      int valorSiguiente = valorCaracterRomano(romano.charAt(i + 1));
+      
+      if (valorActual < valorSiguiente) {
+        resultado -= valorActual;
+      } else {
+        resultado += valorActual;
+      }
+    } else {
+      resultado += valorActual;
+    }
+  }
+  
+  return resultado;
+}
+
+// Función para obtener el valor de un carácter romano
+int valorCaracterRomano(char c) {
+  switch (c) {
+    case 'M':
+      return 1000;
+    case 'D':
+      return 500;
+    case 'C':
+      return 100;
+    case 'L':
+      return 50;
+    case 'X':
+      return 10;
+    case 'V':
+      return 5;
+    case 'I':
+      return 1;
+    default:
+      return 0;
+  }
+}
+
+void loop() {
+  while (!Serial.available()) {
+  }
+  // Lee la cadena ingresada desde el monitor serial
+  String numeroRomano = Serial.readStringUntil('\n');
+  
+  // Convierte el número romano a arábigo
+  int numeroArabigo = convertirARabigo(numeroRomano);
+  // Imprime el resultado
+  Serial.print("El numero ingresado fue: ");
+  Serial.print(numeroRomano);
+  Serial.print(" Que corresponde a: ");
+  Serial.println(numeroArabigo);
+  // Limpia el búfer serial
+  while (Serial.available()) {
+    Serial.read();
+  }
+}
+---------------------------------------------------------------
+Problema 17
+int sumDivisors(int num) {
+  int sum = 0;
+  for (int i = 1; i <= num / 2; i++) {
+    if (num % i == 0) {
+      sum += i;
+    }
+  }
+  return sum;
+}
+
+void setup() {
+  Serial.begin(9600);
+  while (!Serial) {
+    ; // Espera a que el puerto serial esté listo
+  }
+}
+
+void loop() {
+  if (Serial.available()) {
+    int num = Serial.parseInt();
+    int totalSum = 0;
+
+    for (int i = 1; i < num; i++) {
+      int sumA = sumDivisors(i);
+      int sumB = sumDivisors(sumA);
+
+      if (i != sumA && i == sumB) {
+        totalSum += i;
+      }
+    }
+
+    Serial.print("El resultado de la suma es: ");
+    Serial.println(totalSum);
+  }
+}
